@@ -1,3 +1,4 @@
+import 'package:drivers_app/authentication/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class CarInfoScreen extends StatefulWidget {
@@ -133,7 +134,7 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
               ElevatedButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (c) => CarInfoScreen()));
+                        MaterialPageRoute(builder: (c) => LoginScreen()));
                   },
                   style: ElevatedButton.styleFrom(
                       primary: Colors.lightGreenAccent),
