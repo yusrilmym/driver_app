@@ -33,7 +33,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 10,
               ),
               const Text(
-                "Register as Ambulance Driver",
+                "Daftar Supir Ambulance",
                 style: TextStyle(
                   fontSize: 26,
                   color: Colors.grey,
