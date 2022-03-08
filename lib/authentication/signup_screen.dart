@@ -20,10 +20,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   //method didalam class
   validateForm() {
     if (nameTextEditingController.text.length < 3) {
-      Fluttertoast.showToast(
-          msg: "Nama harus memiliki 3 Karakter",
-          textColor: Colors.white,
-          fontSize: 16.0);
+      Fluttertoast.showToast(msg: "Nama harus memiliki 3 Karakter");
     } else if (!emailTextEditingController.text.contains("@")) {
       Fluttertoast.showToast(msg: "Alamat Email tidak valid");
     } else if (phoneTextEditingController.text.isEmpty) {
