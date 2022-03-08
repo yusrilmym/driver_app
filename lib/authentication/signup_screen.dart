@@ -1,6 +1,7 @@
 import 'package:drivers_app/authentication/car_info_screen.dart';
 import 'package:drivers_app/authentication/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -8,12 +9,29 @@ class SignUpScreen extends StatefulWidget {
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
+//function disini
 
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController nameTextEditingController = TextEditingController();
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController phoneTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
+
+  //method didalam class
+  validateForm() {
+    if (nameTextEditingController.text.length < 3) {
+      Fluttertoast.showToast(
+          msg: "Nama harus memiliki 3 Karakter",
+          textColor: Colors.white,
+          fontSize: 16.0);
+    } else if (!emailTextEditingController.text.contains("@")) {
+      Fluttertoast.showToast(msg: "Alamat Email tidak valid");
+    } else if (phoneTextEditingController.text.isEmpty) {
+      Fluttertoast.showToast(msg: "Nomer Telfon Wajib di isi");
+    } else if (passwordTextEditingController.text.length < 6) {
+      Fluttertoast.showToast(msg: "Password wajib lebih dari 6 karakter");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 10,
               ),
               const Text(
-                "Daftar Supir Ambulance tes",
+                "Daftar Supir Ambulance",
                 style: TextStyle(
                   fontSize: 26,
                   color: Colors.grey,
@@ -115,8 +133,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (c) => CarInfoScreen()));
+                    validateForm();
                   },
                   style: ElevatedButton.styleFrom(
                       primary: Colors.lightGreenAccent),

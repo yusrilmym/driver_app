@@ -13,7 +13,7 @@ class MySplashScreen extends StatefulWidget {
 
 class _MySplashScreenState extends State<MySplashScreen> {
   startTimer() {
-    Timer(const Duration(seconds: 13), () async {
+    Timer(const Duration(seconds: 4), () async {
       //after splash screen home screen
       Navigator.push(
           context, MaterialPageRoute(builder: (c) => SignUpScreen()));
@@ -40,7 +40,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
                 height: 10,
               ),
               const Text(
-                "Uber & inDriver Clone App",
+                "SIGADAR",
                 style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
