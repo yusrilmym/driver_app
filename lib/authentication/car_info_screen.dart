@@ -106,7 +106,7 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
                 // icon: Icon(Icons.map),
                 dropdownColor: Colors.black,
                 hint: const Text(
-                  "Please Choose Car Type",
+                  "Pilih jenis Ambulan",
                   style: TextStyle(
                     fontSize: 14.0,
                     color: Colors.grey,
