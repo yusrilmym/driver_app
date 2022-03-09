@@ -19,7 +19,7 @@ class _CarInfoScreenState extends State<CarInfoScreen> {
   List<String> carTypeList = [
     "ambulance Kecil",
     "Ambulan Sedang",
-    "Ambulan Besa"
+    "Ambulan Besar"
   ];
 
   String? selectedCarType;
