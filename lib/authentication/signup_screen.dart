@@ -1,5 +1,6 @@
 import 'package:drivers_app/authentication/car_info_screen.dart';
 import 'package:drivers_app/authentication/login_screen.dart';
+import 'package:drivers_app/widgets/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -27,6 +28,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
       Fluttertoast.showToast(msg: "Nomer Telfon Wajib di isi");
     } else if (passwordTextEditingController.text.length < 6) {
       Fluttertoast.showToast(msg: "Password wajib lebih dari 6 karakter");
+    } else {
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext c) {
+            return ProgressDialog(
+              message: "Processing, Please wait....",
+            );
+          });
     }
   }
 
