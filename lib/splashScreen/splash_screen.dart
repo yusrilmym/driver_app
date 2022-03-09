@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:drivers_app/authentication/login_screen.dart';
 import 'package:drivers_app/authentication/signup_screen.dart';
 import 'package:drivers_app/mainScreens/main_screen.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
   startTimer() {
     Timer(const Duration(seconds: 4), () async {
       //after splash screen home screen
-      Navigator.push(
-          context, MaterialPageRoute(builder: (c) => SignUpScreen()));
+      Navigator.push(context, MaterialPageRoute(builder: (c) => LoginScreen()));
     });
   }
 
