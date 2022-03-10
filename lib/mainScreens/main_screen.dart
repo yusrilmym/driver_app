@@ -43,8 +43,7 @@ class _MainScreenState extends State<MainScreen>
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.credit_card), label: "Earnings"),
+          BottomNavigationBarItem(icon: Icon(Icons.credit_card), label: "List"),
           BottomNavigationBarItem(icon: Icon(Icons.star), label: "Rating"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Account"),
         ],
