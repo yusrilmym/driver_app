@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:drivers_app/assistans/assistant_methods.dart';
+import 'package:drivers_app/global/global.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomeTabPage extends StatefulWidget {
@@ -18,6 +21,11 @@ class _HomeTabPageState extends State<HomeTabPage> {
     target: LatLng(-6.473271, 106.831408),
     zoom: 14.4746,
   );
+
+  Position? userCurrentPosition;
+  var geoLocator = Geolocator();
+  LocationPermission? _locationPermission;
+
   blackThemeGoogleMap() {
     newGoogleMapController!.setMapStyle('''
                     [
@@ -184,6 +192,43 @@ class _HomeTabPageState extends State<HomeTabPage> {
                 ''');
   }
 
+  checkIfLocationPermissionAllowed() async {
+    _locationPermission = await Geolocator.requestPermission();
+
+    if (_locationPermission == LocationPermission.denied) {
+      _locationPermission = await Geolocator.requestPermission();
+    }
+  }
+
+  locateDriverPosition() async {
+    Position cPosition = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    userCurrentPosition = cPosition;
+
+    LatLng latLngPosition =
+        LatLng(userCurrentPosition!.latitude, userCurrentPosition!.longitude);
+    CameraPosition cameraPosition =
+        CameraPosition(target: latLngPosition, zoom: 14);
+
+    newGoogleMapController!
+        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
+    String humanReadableAddress =
+        await AssistantMethods.searchAddressForGeographicCoOrdinates(
+            userCurrentPosition!, context);
+    print("this is your address = " + humanReadableAddress);
+
+    // userName = userModelCurrentInfo!.name!;
+    // userEmail = userModelCurrentInfo!.email!;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    checkIfLocationPermissionAllowed();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -196,6 +241,8 @@ class _HomeTabPageState extends State<HomeTabPage> {
               _controllerGoogleMap.complete(controller);
               newGoogleMapController = controller;
               blackThemeGoogleMap();
+
+              locateDriverPosition();
             })
       ],
     );
