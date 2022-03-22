@@ -27,7 +27,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
   LocationPermission? _locationPermission;
 
   String statusText = "Now Offline";
-  Color statusColor = Colors.grey;
+  Color butttonColor = Colors.grey;
   bool isDriverActive = false;
 
   blackThemeGoogleMap() {
@@ -256,7 +256,43 @@ class _HomeTabPageState extends State<HomeTabPage> {
                 width: double.infinity,
                 color: Colors.black87,
               )
-            : Container()
+            : Container(),
+
+        //button for online offline driver
+        Positioned(
+          top: statusText != "Now Online"
+              ? MediaQuery.of(context).size.height * 0.46
+              : 25,
+          left: 0,
+          right: 0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                    primary: butttonColor,
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(26))),
+                child: statusText != "Now Online"
+                    ? Text(
+                        statusText,
+                        style: const TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Icon(
+                        Icons.phonelink_ring,
+                        color: Colors.white,
+                        size: 26,
+                      ),
+              )
+            ],
+          ),
+        ),
       ],
     );
   }
