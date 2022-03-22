@@ -10,7 +10,7 @@ class HomeTabPage extends StatefulWidget {
   const HomeTabPage({Key? key}) : super(key: key);
 
   @override
-  State<HomeTabPage> createState() => _HomeTabPageState();
+  _HomeTabPageState createState() => _HomeTabPageState();
 }
 
 class _HomeTabPageState extends State<HomeTabPage> {
@@ -22,7 +22,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
     zoom: 14.4746,
   );
 
-  Position? userCurrentPosition;
+  Position? driverCurrentPosition;
   var geoLocator = Geolocator();
   LocationPermission? _locationPermission;
 
@@ -207,10 +207,10 @@ class _HomeTabPageState extends State<HomeTabPage> {
   locateDriverPosition() async {
     Position cPosition = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    userCurrentPosition = cPosition;
+    driverCurrentPosition = cPosition;
 
-    LatLng latLngPosition =
-        LatLng(userCurrentPosition!.latitude, userCurrentPosition!.longitude);
+    LatLng latLngPosition = LatLng(
+        driverCurrentPosition!.latitude, driverCurrentPosition!.longitude);
     CameraPosition cameraPosition =
         CameraPosition(target: latLngPosition, zoom: 14);
 
@@ -219,7 +219,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
     String humanReadableAddress =
         await AssistantMethods.searchAddressForGeographicCoOrdinates(
-            userCurrentPosition!, context);
+            driverCurrentPosition!, context);
     print("this is your address = " + humanReadableAddress);
 
     // userName = userModelCurrentInfo!.name!;
