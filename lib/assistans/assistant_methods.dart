@@ -17,8 +17,10 @@ class AssistantMethods {
     String apiUrl =
         "https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=$mapKey";
     String humanReadableAddress = "";
+
     var requestResponse = await RequestAssistant.receiveRequest(apiUrl);
-    if (requestResponse != "Error Occured, failed. No Response") {
+
+    if (requestResponse != "Error Occurred, Failed. No Response.") {
       humanReadableAddress = requestResponse["results"][0]["formatted_address"];
 
       Directions userPickUpAddress = Directions();
@@ -35,6 +37,7 @@ class AssistantMethods {
 
   static void readCurrentOnlineUserInfo() async {
     currentFirebaseUser = fAuth.currentUser;
+
     DatabaseReference userRef = FirebaseDatabase.instance
         .ref()
         .child("users")
@@ -43,39 +46,37 @@ class AssistantMethods {
     userRef.once().then((snap) {
       if (snap.snapshot.value != null) {
         userModelCurrentInfo = UserModel.fromSnapshot(snap.snapshot);
-        // print("name = " + userModelCurrentInfo!.name.toString());
-        // print("email = " + userModelCurrentInfo!.email.toString());
       }
     });
   }
 
-  //pertama
-  static Future<DirectionDetailsInfo?> obtainOriginToDestinationDirectionDetail(
-      LatLng originPosition, LatLng destinationPosition) async {
-    String urlOriginToDestinationDirectionDetail =
-        "https://maps.googleapis.com/maps/api/directions/json?origin=${originPosition.latitude},${originPosition.longitude}&destination=${destinationPosition.latitude},${destinationPosition.longitude}&key=$mapKey";
+  static Future<DirectionDetailsInfo?>
+      obtainOriginToDestinationDirectionDetails(
+          LatLng origionPosition, LatLng destinationPosition) async {
+    String urlOriginToDestinationDirectionDetails =
+        "https://maps.googleapis.com/maps/api/directions/json?origin=${origionPosition.latitude},${origionPosition.longitude}&destination=${destinationPosition.latitude},${destinationPosition.longitude}&key=$mapKey";
 
     var responseDirectionApi = await RequestAssistant.receiveRequest(
-        urlOriginToDestinationDirectionDetail);
+        urlOriginToDestinationDirectionDetails);
 
-    if (responseDirectionApi == "Error Occured, failed. No Response") {
-      return null; // nulable ? <> pertama
+    if (responseDirectionApi == "Error Occurred, Failed. No Response.") {
+      return null;
     }
-    //ketiga
+
     DirectionDetailsInfo directionDetailsInfo = DirectionDetailsInfo();
-    //same with documentation direction
     directionDetailsInfo.e_points =
         responseDirectionApi["routes"][0]["overview_polyline"]["points"];
+
     directionDetailsInfo.distance_text =
         responseDirectionApi["routes"][0]["legs"][0]["distance"]["text"];
     directionDetailsInfo.distance_value =
         responseDirectionApi["routes"][0]["legs"][0]["distance"]["value"];
-    //getting response
+
     directionDetailsInfo.duration_text =
         responseDirectionApi["routes"][0]["legs"][0]["duration"]["text"];
     directionDetailsInfo.duration_value =
         responseDirectionApi["routes"][0]["legs"][0]["duration"]["value"];
-    //ke empat
-    return directionDetailsInfo; //edit static future <> pertama
+
+    return directionDetailsInfo;
   }
 }

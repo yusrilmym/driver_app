@@ -26,6 +26,10 @@ class _HomeTabPageState extends State<HomeTabPage> {
   var geoLocator = Geolocator();
   LocationPermission? _locationPermission;
 
+  String statusText = "Now Offline";
+  Color statusColor = Colors.grey;
+  bool isDriverActive = false;
+
   blackThemeGoogleMap() {
     newGoogleMapController!.setMapStyle('''
                     [
@@ -243,7 +247,16 @@ class _HomeTabPageState extends State<HomeTabPage> {
               blackThemeGoogleMap();
 
               locateDriverPosition();
-            })
+            }),
+
+        //ui for online offline driver
+        statusText != "Now Online"
+            ? Container(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                color: Colors.black87,
+              )
+            : Container()
       ],
     );
   }
