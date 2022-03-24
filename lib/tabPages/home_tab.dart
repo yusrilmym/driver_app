@@ -1,8 +1,13 @@
 import 'dart:async';
-
 import 'package:drivers_app/assistans/assistant_methods.dart';
 import 'package:drivers_app/global/global.dart';
+import 'package:drivers_app/main.dart';
+import 'package:drivers_app/splashScreen/splash_screen.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_geofire/flutter_geofire.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -269,7 +274,31 @@ class _HomeTabPageState extends State<HomeTabPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  if (isDriverActive != true) //offline
+                  {
+                    driverIsOnlineNow();
+                    updateDriversLocationAtRealTime();
+
+                    setState(() {
+                      statusText = "Now Online";
+                      isDriverActive = true;
+                      butttonColor = Colors.transparent;
+                    });
+
+                    //display toast
+                    Fluttertoast.showToast(msg: "You are Online Now");
+                  } else {
+                    driverIsOfflineNow();
+                    setState(() {
+                      statusText = "Now Offline";
+                      isDriverActive = false;
+                      butttonColor = Colors.grey;
+
+                      Fluttertoast.showToast(msg: "You are Offline Now");
+                    });
+                  }
+                },
                 style: ElevatedButton.styleFrom(
                     primary: butttonColor,
                     padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -295,5 +324,62 @@ class _HomeTabPageState extends State<HomeTabPage> {
         ),
       ],
     );
+  }
+
+  //realtime database firebase
+  driverIsOnlineNow() async {
+    Position pos = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    driverCurrentPosition = pos;
+
+    Geofire.initialize("activeDrivers");
+
+    Geofire.setLocation(currentFirebaseUser!.uid,
+        driverCurrentPosition!.latitude, driverCurrentPosition!.longitude);
+
+    DatabaseReference ref = FirebaseDatabase.instance
+        .ref()
+        .child("drivers")
+        .child(currentFirebaseUser!.uid)
+        .child("newRideStatus");
+
+    ref.set("idle"); //searching for ride request
+    ref.onValue.listen((event) {});
+  }
+
+  updateDriversLocationAtRealTime() {
+    streamSubscriptionPosition =
+        Geolocator.getPositionStream().listen((Position position) {
+      driverCurrentPosition = position;
+
+      if (isDriverActive == true) {
+        Geofire.setLocation(currentFirebaseUser!.uid,
+            driverCurrentPosition!.latitude, driverCurrentPosition!.longitude);
+      }
+
+      LatLng latLng = LatLng(
+          driverCurrentPosition!.latitude, driverCurrentPosition!.longitude);
+
+      newGoogleMapController!.animateCamera(CameraUpdate.newLatLng(latLng));
+    });
+  }
+
+  driverIsOfflineNow() {
+    Geofire.removeLocation(currentFirebaseUser!.uid);
+    DatabaseReference? ref = FirebaseDatabase.instance
+        .ref()
+        .child("drivers")
+        .child(currentFirebaseUser!.uid)
+        .child("newRideStatus");
+
+    ref.onDisconnect();
+    ref.remove();
+    ref = null;
+
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      // SystemChannels.platform.invokeMethod("SystemNavigator.pop");
+      SystemNavigator.pop();
+    });
   }
 }
